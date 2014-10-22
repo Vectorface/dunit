@@ -1,9 +1,43 @@
 #!/bin/sh
-command -v docker >/dev/null 2>&1 || { echo >&2 "Docker is required to run the test suite against multiple versions of PHP. Please just use ./vendor/bin/phpunit."; exit 1; }
 
-for phpVersion in 5.3 5.4 5.5 5.6
-do
-    echo ""
-    echo "Running tests on PHP ${phpVersion}"
-    docker run -v "$(pwd)":/opt/source -i -t -w /opt/source dbruce/debian7-php${phpVersion} /opt/source/vendor/bin/phpunit
+#Default PHP versions
+phpVersion="5.3 5.4 5.5 5.6"
+dockerMountPath=$(pwd)
+
+#getopt That allows the options to be passed
+while getopts ":hp:" opt; do
+  shift $((OPTIND-1))
+  case ${opt} in
+    h)
+      printf "Options:\n"
+      printf "%-20s %-40s\n" '-h' 'Displays help information'
+      printf "%-20s %-40s\n" '-p' 'PHP Versions you wish to use (default: "5.3 5.4 5.5 5.6")'
+      exit 0;
+      ;;
+    p)
+      phpVersion=$OPTARG
+      ;;
+    \?)
+      printf "Invalid option: -$OPTARG\n"
+      exit 1
+      ;;
+    :)
+      printf "Option -$OPTARG requires an argument.\n"
+      exit 1
+      ;;
+  esac
+done
+
+#Allow path to be passed to docker for mounting
+if [ -n "$1" ]; 
+  then dockerMountPath="${dockerMountPath}/$1";
+fi
+
+#Check if they have docker
+command -v docker >/dev/null 2>&1 || { printf >&2 "Docker is required to run the test suite against multiple versions of PHP.\nPlease just use ./vendor/bin/phpunit.\n"; exit 1; }
+
+#Spin up containers for the versions we're testing against
+for version in ${phpVersion}; do
+  printf "\nRunning tests on PHP %s\n" ${version}
+  docker run -v "${dockerMountPath}":/opt/source -i -t -w /opt/source dbruce/debian7-php${version} /opt/source/vendor/bin/phpunit
 done
