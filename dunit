@@ -29,7 +29,7 @@ while getopts ":hp:" opt; do
 done
 
 #Allow path to be passed to docker for mounting
-if [ -n "$1" ]; 
+if [ -n "$1" ];
   then dockerMountPath="${dockerMountPath}/$1";
 fi
 
