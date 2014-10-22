@@ -4,6 +4,11 @@
 phpVersion="5.3 5.4 5.5 5.6"
 dockerMountPath=$(pwd)
 
+#Allow global environment variable for version
+if [ -n "${DUNIT_VERSION}" ];
+  then phpVersion=${DUNIT_VERSION}
+fi
+
 #getopt That allows the options to be passed
 while getopts ":hp:" opt; do
   shift $((OPTIND-1))
