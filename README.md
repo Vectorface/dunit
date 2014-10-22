@@ -1,65 +1,57 @@
-#Dunit
+# DUnit
 
-[Docker](https://www.docker.com/whatisdocker/) is required for Dunit. Dunit makes your life easier by making sure your PHPUnit tests works across different PHP versions. It also
-allows you to check that the syntax passes across different PHP versions as well.
+DUnit (dee-unit) makes your life easier by allowing you to test your PHP code
+across multiple versions of PHP. [Docker](https://www.docker.com/whatisdocker/)
+is used to provide an isolated test environment for each version of PHP. Out of
+the box DUnit can perform a syntax check against your whole repository or run a
+[PHPUnit](https://phpunit.de/) test suite.
+
+## Supported versions of PHP
+
+DUnit currently supports:
+* PHP 5.3
+* PHP 5.4
+* PHP 5.5
+* PHP 5.6
 
 ## Installation
 
-Simply the following to your composer.json `require-dev` field like so:
+Simply add the following to your composer.json `require-dev` field:
 
     "require-dev": {
         "vectorface/dunit": "~0.1.0"
     }
 
-Don't forget to run `composer update` afterwards.
+and run `composer update`.
 
 ## Usage
 
-Once the package is added to require-dev you'll be able to get going started with just this:
 ```shell
+# run your test suite against all supported version of PHP
 $ ./vendor/bin/dunit
-```
 
-#### Basic usage
-```shell
-#Grab the help docs
+# show the help documentation
 $ ./vendor/bin/dunit -h
 
-#Custom configuration files
+# specify a custom configuration file
 $ ./vendor/bin/dunit -c "path/.dunit.conf"
 
-#Quickly limit PHP versions to try
+# explictly specify which versions of PHP to use
 $ ./vendor/bin/dunit -p "5.3 5.4"
 ```
 
-##Configuration
-Everything is pretty much customization through the `.dunit.config` file, lets begin by copying the defaults so that you can change them:
+## Configuration
+
+Everything is customizable through the file `.dunitconfig` file. It is
+recommended to copy the included default configuration file `.dunitconfig.dist`
+and make changes as needed:
 
 ```shell
-$ cp .dunit.config.dist .dunit.config
-#Global environment variables will also work of using .dunit.config
+$ cp .dunitconfig.dist .dunitconfig
 ```
 
-#### I only want this to check PHP 5.3 & 5.4
+or use environment variables to override the default settings:
 
-```source
-DUNIT_PHPVERSION="5.3 5.4"
+```shell
+$ DUNIT_PHPVERSION="5.3 5.4" DUNIT_SYNTAXONLY=true ./vendor/bin/dunit
 ```
-
-#### I don't have unit tests & just want syntax checking
-```source
-DUNIT_SYNTAXONLY=true
-```
-
-#### I want to change the PHPUnit path
-```source
-DUNIT_PHPUNITCOMMAND="/opt/source/vendor/bin/phpunit"
-```
-
-#### I need to custom the grep for the syntax checker
-```source
-DUNIT_PHPSYNTAXCOMMAND="find /opt/source/ -name '*.php' -print0 | xargs -0 -n1 -P8 php -l | grep -i 'on line'"
-```
-
-#### Can this do both unit tests checks and syntax checks?
-You can bet your bitcoins that it can! Just append `DUNIT_PHPUNITCOMMAND` to `DUNIT_PHPSYNTAXCOMMAND` or vice versa depending on your `DUNIT_SYNTAXONLY` settings.
