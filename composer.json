@@ -1,0 +1,32 @@
+{
+    "name": "vectorface/dunit",
+    "description": "Test code against multiple versions of PHP with the help of docker",
+    "keywords": [
+        "Docker", "PHPUnit", "PHP", "Testing"
+    ],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Bruce",
+            "email": "dbruce@vectorface.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Cory Darby",
+            "email": "ckdarby@vectorface.com",
+            "role": "Developer"
+        }
+    ],
+    "bin": [
+        "dunit"
+    ],
+    "config": {
+        "bin-dir": "bin"
+    },
+    "homepage": "https://github.com/Vectorface/dunit",
+    "support": {
+        "issues": "https://github.com/Vectorface/dunit/issues",
+        "source": "https://github.com/Vectorface/dunit"
+    }
+}
