@@ -9,8 +9,8 @@ phpVersion="5.3 5.4 5.5 5.6"
 dockerMountPath=$(pwd)
 syntaxOnly=false
 phpUnitCommand="/opt/source/vendor/bin/phpunit"
-phpSyntaxCommand="find ${dockerMountPath} -iname '*.php' -exec php -l {} \; | grep -i 'Parse error'"
-configPath="${SCRIPTPATH}/.config"
+phpSyntaxCommand="find . -name '*.php' -print0 | xargs -0 -n1 -P8 php -l | grep -i 'on line'"
+configPath="${SCRIPTPATH}/.dunit.config"
 
 #getopt That allows the options to be passed
 while getopts ":hp:c:" opt; do
@@ -78,5 +78,5 @@ fi
 #Spin up containers for the versions we're testing against
 for version in ${phpVersion}; do
   printf "\nRunning on PHP %s\n" ${version}
-  docker run -v "${dockerMountPath}":/opt/source -i -t -w /opt/source dbruce/debian7-php${version} ${runCommand}
+  docker run -v ${dockerMountPath}:/opt/source -i -t -w /opt/source dbruce/debian7-php${version} sh -c "${runCommand}"
 done
