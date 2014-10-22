@@ -25,6 +25,9 @@
         "bin-dir": "bin"
     },
     "homepage": "https://github.com/Vectorface/dunit",
+    "require": {
+        "phpunit/phpunit": "*"
+    },
     "support": {
         "issues": "https://github.com/Vectorface/dunit/issues",
         "source": "https://github.com/Vectorface/dunit"
