@@ -19,7 +19,6 @@ DUNIT_PHPSYNTAXCOMMAND="find /opt/source -type f -name \"*.php\" -print0 | xargs
 
 #config path
 configPath="${scriptPath}/.dunitconfig"
-echo ${configPath}
 
 #getopt That allows the options to be passed
 while getopts ":hp:c:" opt; do
