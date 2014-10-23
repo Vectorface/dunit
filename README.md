@@ -27,7 +27,7 @@ and run `composer update`.
 ## Usage
 
 ```shell
-# run your test suite against all supported version of PHP
+# run PHP syntax checks and your test suite against all supported version of PHP
 $ ./vendor/bin/dunit
 
 # show the help documentation
