@@ -19,7 +19,7 @@ DUnit currently supports:
 Simply add the following to your composer.json `require-dev` field:
 
     "require-dev": {
-        "vectorface/dunit": "~0.1.0"
+        "vectorface/dunit": "~1.0.0"
     }
 
 and run `composer update`.
