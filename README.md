@@ -3,7 +3,7 @@
 DUnit (dee-unit) makes your life easier by allowing you to test your PHP code
 across multiple versions of PHP. [Docker](https://www.docker.com/whatisdocker/)
 is used to provide an isolated test environment for each version of PHP. Out of
-the box DUnit can perform a syntax check against your whole repository or run a
+the box DUnit can perform a syntax check against your whole repository and run a
 [PHPUnit](https://phpunit.de/) test suite.
 
 ## Supported versions of PHP
