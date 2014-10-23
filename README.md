@@ -34,7 +34,7 @@ $ ./vendor/bin/dunit
 $ ./vendor/bin/dunit -h
 
 # specify a custom configuration file
-$ ./vendor/bin/dunit -c "path/.dunit.conf"
+$ ./vendor/bin/dunit -c "path/.dunitconf"
 
 # explictly specify which versions of PHP to use
 $ ./vendor/bin/dunit -p "5.3 5.4"
@@ -53,5 +53,5 @@ $ cp .dunitconfig.dist .dunitconfig
 or use environment variables to override the default settings:
 
 ```shell
-$ DUNIT_PHPVERSION="5.3 5.4" DUNIT_SYNTAXONLY=true ./vendor/bin/dunit
+$ DUNIT_PHPVERSION="5.3 5.4" DUNIT_PHPSYNTAX=true ./vendor/bin/dunit
 ```
