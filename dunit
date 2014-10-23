@@ -1,16 +1,25 @@
-#!/bin/bash
+#!/bin/bash -l
 
 #Internal Script variables
-SCRIPT=`realpath $0`
-SCRIPTPATH=`dirname $SCRIPT`
+script=$(readlink -f $0)
+scriptPath=`dirname ${script}`
+
+workingPath=$(pwd)
 
 #Default PHP versions
 phpVersion="5.3 5.4 5.5 5.6"
-dockerMountPath=$(pwd)
-syntaxOnly=false
+
+#phpunit
+phpUnit=true
 phpUnitCommand="/opt/source/vendor/bin/phpunit"
-phpSyntaxCommand="find . -name '*.php' -print0 | xargs -0 -n1 -P8 php -l | grep -i 'on line'"
-configPath="${SCRIPTPATH}/.dunit.config"
+
+#php syntax
+phpSyntax=true
+DUNIT_PHPSYNTAXCOMMAND="find /opt/source -type f -name \"*.php\" -print0 | xargs -0 -n 1 -P 8 php -l | grep -v 'No syntax errors'"
+
+#config path
+configPath="${scriptPath}/.dunitconfig"
+echo ${configPath}
 
 #getopt That allows the options to be passed
 while getopts ":hp:c:" opt; do
@@ -40,17 +49,21 @@ while getopts ":hp:c:" opt; do
   esac
 done
 
+#Config & Global overwrite
 if [ -a "${configPath}" ];
   then source ${configPath}
 fi;
 
-#Config & Global overwrite
 if [ -n "${DUNIT_PHPVERSION}" ];
   then phpVersion=${DUNIT_PHPVERSION}
 fi
 
-if [ -n "${DUNIT_SYNTAXONLY}" ];
-  then syntaxOnly=${DUNIT_SYNTAXONLY}
+if [ -n "${DUNIT_PHPUNIT}" ];
+  then phpUnit=${DUNIT_PHPUNIT}
+fi
+
+if [ -n "${DUNIT_PHPSYNTAX}" ];
+  then phpSyntax=${DUNIT_PHPSYNTAX}
 fi
 
 if [ -n "${DUNIT_PHPUNITCOMMAND}" ];
@@ -63,21 +76,25 @@ fi
 
 #Allow path to be passed to docker for mounting
 if [ -n "$1" ];
-  then dockerMountPath="${dockerMountPath}/$1";
+  then workingPath="${workingPath}/$1";
 fi
 
 #Check if they have docker
 command -v docker >/dev/null 2>&1 || { printf >&2 "Docker is required to run the test suite against multiple versions of PHP.\nPlease just use ./vendor/bin/phpunit.\n"; exit 1; }
 
-#Determine if we want PHP syntax lint only or just to run the unit tests
-if [ "${syntaxOnly}" = true ];
-  then runCommand=${phpSyntaxCommand}
-else
-  runCommand=${phpUnitCommand}
+#Determine the commands the script is going to be running
+runCommand=''
+if [ "${phpSyntax}" = true ];
+  then runCommand="${phpSyntaxCommand};"
+fi
+
+if [ "${phpUnit}" = true ];
+  then runCommand="${runCommand} ${phpUnitCommand}"
 fi
 
 #Spin up containers for the versions we're testing against
 for version in ${phpVersion}; do
   printf "\nRunning on PHP %s\n" ${version}
-  docker run -v ${dockerMountPath}:/opt/source -i -t -w /opt/source dbruce/debian7-php${version} sh -c "${runCommand}"
+  dockerCommand="docker run -v ${workingPath}:/opt/source -i -t -w /opt/source dbruce/debian7-php${version} bash -c \" ${runCommand} \""
+  eval ${dockerCommand}
 done

@@ -1,4 +1,4 @@
-.dunit.config
+.dunitconfig
 composer.lock
 composer.phar
 vendor/
