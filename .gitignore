@@ -1,1 +1,4 @@
 .dunit.config
+composer.lock
+composer.phar
+vendor/
