@@ -14,6 +14,15 @@ DUnit currently supports:
 * PHP 5.5
 * PHP 5.6
 
+and has the following extensions installed:
+
+* apc (apcu on 5.5 and higher)
+* curl
+* gd
+* intl
+* json
+* mcrypt
+
 ## Installation
 
 Simply add the following to your composer.json `require-dev` field:
