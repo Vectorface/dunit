@@ -56,7 +56,7 @@ recommended to copy the included default configuration file `.dunitconfig.dist`
 and make changes as needed:
 
 ```shell
-$ cp .dunitconfig.dist .dunitconfig
+$ cp ./vendor/vectorface/dunit/.dunitconfig.dist ./.dunitconfig
 ```
 
 or use environment variables to override the default settings:
