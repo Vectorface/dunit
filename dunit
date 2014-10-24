@@ -1,27 +1,22 @@
 #!/bin/bash -l
 
-#Internal Script variables
+# internal script variables
 script=$(readlink -f $0)
 scriptPath=`dirname ${script}`
-
 workingPath=$(pwd)
 
-#Default PHP versions
+# default variables
 phpVersion="5.3 5.4 5.5 5.6"
 dockerImage="vectorface/php"
-
-#phpunit
-phpUnit=true
-phpUnitCommand="/opt/source/vendor/bin/phpunit"
-
-#php syntax
 phpSyntax=true
-DUNIT_PHPSYNTAXCOMMAND="find /opt/source -type f -name \"*.php\" -print0 | xargs -0 -n 1 -P 8 php -l | grep -v 'No syntax errors'"
+phpUnit=true
+DUNIT_PHPSYNTAXCOMMAND="find /opt/source -type f -name \"*.php\" !  -path \"*/vendor/*\" -print0 | xargs -0 -n 1 -P 8 php -l | grep -v 'No syntax errors'"
+DUNIT_PHPUNITCOMMAND="/opt/source/vendor/bin/phpunit"
 
-#config path
-configPath="${scriptPath}/.dunitconfig"
+# config path
+configPath="${workingPath}/.dunitconfig"
 
-#getopt That allows the options to be passed
+# getopt That allows the options to be passed
 while getopts ":hp:c:" opt; do
   shift $((OPTIND-1))
   case ${opt} in
@@ -49,7 +44,7 @@ while getopts ":hp:c:" opt; do
   esac
 done
 
-#Config & Global overwrite
+# config and global overwrite
 if [ -a "${configPath}" ];
   then source ${configPath}
 fi;
@@ -66,27 +61,19 @@ if [ -n "${DUNIT_PHPSYNTAX}" ];
   then phpSyntax=${DUNIT_PHPSYNTAX}
 fi
 
-if [ -n "${DUNIT_PHPUNITCOMMAND}" ];
-  then phpUnitCommand=${DUNIT_PHPUNITCOMMAND}
-fi
-
-if [ -n "${DUNIT_PHPSYNTAXCOMMAND}" ];
-  then phpSyntaxCommand=${DUNIT_PHPSYNTAXCOMMAND}
-fi
-
 if [ -n "${DUNIT_IMAGE_NAME}" ];
   then dockerImage=${DUNIT_IMAGE_NAME}
 fi
 
-#Allow path to be passed to docker for mounting
+# allow path to be passed to docker for mounting
 if [ -n "$1" ];
   then workingPath="${workingPath}/$1";
 fi
 
-#Check if they have docker
+# check if they have docker
 command -v docker >/dev/null 2>&1 || { printf >&2 "Docker is required to run the test suite against multiple versions of PHP.\nPlease just use ./vendor/bin/phpunit.\n"; exit 1; }
 
-#Determine the commands the script is going to be running
+# determine the commands the script is going to be running
 runCommand=''
 if [ "${phpSyntax}" = true ];
   then runCommand="${phpSyntaxCommand};"
@@ -96,9 +83,15 @@ if [ "${phpUnit}" = true ];
   then runCommand="${runCommand} ${phpUnitCommand}"
 fi
 
-#Spin up containers for the versions we're testing against
+# spin up containers for the versions we're testing against
 for version in ${phpVersion}; do
   printf "\nRunning on PHP %s\n" ${version}
-  dockerCommand="docker run -v ${workingPath}:/opt/source -i -t -w /opt/source ${dockerImage}${version} bash -c \" ${runCommand} \""
-  eval ${dockerCommand}
+  if [ $phpSyntax == true ]; then
+    echo "Checking syntax"
+    eval "docker run -v ${workingPath}:/opt/source -i -t -w /opt/source ${dockerImage}${version} bash -c \" ${DUNIT_PHPSYNTAXCOMMAND} \""
+  fi
+  if [ $phpUnit == true ]; then
+    echo "Running unit test suite"
+    eval "docker run -v ${workingPath}:/opt/source -i -t -w /opt/source ${dockerImage}${version} bash -c \" ${DUNIT_PHPUNITCOMMAND} \""
+  fi
 done
