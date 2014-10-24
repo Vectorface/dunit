@@ -9,6 +9,7 @@ the box DUnit can perform a syntax check against your whole repository and run a
 ## Supported versions of PHP
 
 DUnit currently supports:
+* PHP 5.2
 * PHP 5.3
 * PHP 5.4
 * PHP 5.5
@@ -16,10 +17,10 @@ DUnit currently supports:
 
 and has the following extensions installed:
 
-* apc (apcu on 5.5 and higher)
+* apc (apcu on PHP 5.5 and newer)
 * curl
 * gd
-* intl
+* intl (PHP 5.3 and newer)
 * json
 * mcrypt
 
