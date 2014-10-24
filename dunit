@@ -8,6 +8,7 @@ workingPath=$(pwd)
 
 #Default PHP versions
 phpVersion="5.3 5.4 5.5 5.6"
+dockerImage="vectorface/php"
 
 #phpunit
 phpUnit=true
@@ -73,6 +74,10 @@ if [ -n "${DUNIT_PHPSYNTAXCOMMAND}" ];
   then phpSyntaxCommand=${DUNIT_PHPSYNTAXCOMMAND}
 fi
 
+if [ -n "${DUNIT_IMAGE_NAME}" ];
+  then dockerImage=${DUNIT_IMAGE_NAME}
+fi
+
 #Allow path to be passed to docker for mounting
 if [ -n "$1" ];
   then workingPath="${workingPath}/$1";
@@ -94,6 +99,6 @@ fi
 #Spin up containers for the versions we're testing against
 for version in ${phpVersion}; do
   printf "\nRunning on PHP %s\n" ${version}
-  dockerCommand="docker run -v ${workingPath}:/opt/source -i -t -w /opt/source dbruce/debian7-php${version} bash -c \" ${runCommand} \""
+  dockerCommand="docker run -v ${workingPath}:/opt/source -i -t -w /opt/source ${dockerImage}${version} bash -c \" ${runCommand} \""
   eval ${dockerCommand}
 done
