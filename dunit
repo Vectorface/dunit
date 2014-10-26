@@ -9,12 +9,7 @@ scriptPath=`dirname ${script}`
 workingPath=$(pwd)
 
 # default variables
-phpVersion="5.3 5.4 5.5 5.6"
-dockerImage="vectorface/php"
-phpSyntax=true
-phpUnit=true
-DUNIT_PHPSYNTAXCOMMAND="find /opt/source -type f -name \"*.php\" !  -path \"*/vendor/*\" -print0 | xargs -0 -n 1 -P 8 php -l | grep -v 'No syntax errors'"
-DUNIT_PHPUNITCOMMAND="/opt/source/vendor/bin/phpunit"
+source "${scriptPath}/.dunitconfig.dist"
 
 # config path
 configPath="${workingPath}/.dunitconfig"
@@ -36,7 +31,7 @@ while getopts ":hp:c:v" opt; do
       exit 0;
       ;;
     p)
-      phpVersion=$OPTARG
+      DUNIT_PHPVERSION=$OPTARG
       ;;
     c)
       configPath=$OPTARG
@@ -57,22 +52,6 @@ if [ -a "${configPath}" ];
   then source ${configPath}
 fi;
 
-if [ -n "${DUNIT_PHPVERSION}" ];
-  then phpVersion=${DUNIT_PHPVERSION}
-fi
-
-if [ -n "${DUNIT_PHPUNIT}" ];
-  then phpUnit=${DUNIT_PHPUNIT}
-fi
-
-if [ -n "${DUNIT_PHPSYNTAX}" ];
-  then phpSyntax=${DUNIT_PHPSYNTAX}
-fi
-
-if [ -n "${DUNIT_IMAGE_NAME}" ];
-  then dockerImage=${DUNIT_IMAGE_NAME}
-fi
-
 # allow path to be passed to docker for mounting
 if [ -n "$1" ];
   then workingPath="${workingPath}/$1";
@@ -81,25 +60,15 @@ fi
 # check if they have docker
 command -v docker >/dev/null 2>&1 || { printf >&2 "Docker is required to run the test suite against multiple versions of PHP.\nPlease just use ./vendor/bin/phpunit.\n"; exit 1; }
 
-# determine the commands the script is going to be running
-runCommand=''
-if [ "${phpSyntax}" = true ];
-  then runCommand="${phpSyntaxCommand};"
-fi
-
-if [ "${phpUnit}" = true ];
-  then runCommand="${runCommand} ${phpUnitCommand}"
-fi
-
 # spin up containers for the versions we're testing against
-for version in ${phpVersion}; do
+for version in ${DUNIT_PHPVERSION}; do
   printf "\nRunning on PHP %s\n" ${version}
-  if [ $phpSyntax == true ]; then
+  if [ $DUNIT_PHPSYNTAX == true ]; then
     echo "Checking syntax"
-    eval "docker run -v ${workingPath}:/opt/source -i -t -w /opt/source ${dockerImage}${version} bash -c \" ${DUNIT_PHPSYNTAXCOMMAND} \""
+    eval "docker run -v ${workingPath}:/opt/source -i -t -w /opt/source ${DUNIT_DOCKERIMAGE}${version} bash -c \" ${DUNIT_PHPSYNTAXCOMMAND} \""
   fi
-  if [ $phpUnit == true ]; then
+  if [ $DUNIT_PHPUNIT == true ]; then
     echo "Running unit test suite"
-    eval "docker run -v ${workingPath}:/opt/source -i -t -w /opt/source ${dockerImage}${version} bash -c \" ${DUNIT_PHPUNITCOMMAND} \""
+    eval "docker run -v ${workingPath}:/opt/source -i -t -w /opt/source ${DUNIT_DOCKERIMAGE}${version} bash -c \" ${DUNIT_PHPUNITCOMMAND} \""
   fi
 done

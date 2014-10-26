@@ -6,3 +6,5 @@ DUNIT_PHPSYNTAXCOMMAND="find /opt/source -type f -name \"*.php\" !  -path \"*/ve
 
 DUNIT_PHPUNIT=true
 DUNIT_PHPUNITCOMMAND="/opt/source/vendor/bin/phpunit"
+
+DUNIT_DOCKERIMAGE="vectorface/php"
