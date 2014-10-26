@@ -1,5 +1,8 @@
 #!/bin/bash -l
 
+#DUnit Version
+dunitVersion="v1.2.0"
+
 # internal script variables
 script=$(readlink -f $0)
 scriptPath=`dirname ${script}`
@@ -17,7 +20,7 @@ DUNIT_PHPUNITCOMMAND="/opt/source/vendor/bin/phpunit"
 configPath="${workingPath}/.dunitconfig"
 
 # getopt That allows the options to be passed
-while getopts ":hp:c:" opt; do
+while getopts ":hp:c:v" opt; do
   shift $((OPTIND-1))
   case ${opt} in
     h)
@@ -25,6 +28,11 @@ while getopts ":hp:c:" opt; do
       printf "%-20s %-40s\n" '-c' 'Pass in a custom .dunit.config file'
       printf "%-20s %-40s\n" '-h' 'Displays help information'
       printf "%-20s %-40s\n" '-p' 'PHP Versions you wish to use (default: "5.3 5.4 5.5 5.6")'
+      printf "%-20s %-40s\n" '-v' 'Displays DUnit version'
+      exit 0;
+      ;;
+    v)
+      printf "DUnit version ${dunitVersion}\n"
       exit 0;
       ;;
     p)
