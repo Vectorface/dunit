@@ -14,11 +14,6 @@ source "${scriptPath}/.dunitconfig.dist"
 # config path
 configPath="${workingPath}/.dunitconfig"
 
-# config and global overwrite
-if [ -a "${configPath}" ];
-  then source ${configPath}
-fi;
-
 # getopt That allows the options to be passed
 while getopts ":hp:c:v" opt; do
   shift $((OPTIND-1))
@@ -51,6 +46,11 @@ while getopts ":hp:c:v" opt; do
       ;;
   esac
 done
+
+# config and global overwrite
+if [ -a "${configPath}" ];
+  then source ${configPath}
+fi;
 
 # allow path to be passed to docker for mounting
 if [ -n "$1" ];
