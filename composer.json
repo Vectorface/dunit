@@ -31,10 +31,5 @@
     "support": {
         "issues": "https://github.com/Vectorface/dunit/issues",
         "source": "https://github.com/Vectorface/dunit"
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "php -r \"copy('./vendor/vectorface/dunit/.dunitconfig.dist', './.dunitconfig');\""
-        ]
     }
 }
