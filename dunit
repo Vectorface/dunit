@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #DUnit Version
-dunitVersion="(git)"
+dunitVersion="dev"
 
 # internal script variables
 script=$(readlink -f $0)
-scriptPath=$(dirname ${script})
+scriptPath=`dirname ${script}`
 workingPath=$(pwd)
 
 # default variables
@@ -13,6 +13,11 @@ source "${scriptPath}/.dunitconfig.dist"
 
 # config path
 configPath="${workingPath}/.dunitconfig"
+
+# config and global overwrite
+if [ -a "${configPath}" ];
+  then source ${configPath}
+fi;
 
 # getopt That allows the options to be passed
 while getopts ":hp:c:v" opt; do
@@ -46,11 +51,6 @@ while getopts ":hp:c:v" opt; do
       ;;
   esac
 done
-
-# config and global overwrite
-if [ -a "${configPath}" ];
-  then source ${configPath}
-fi;
 
 # allow path to be passed to docker for mounting
 if [ -n "$1" ];
