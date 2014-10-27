@@ -52,16 +52,5 @@ $ ./vendor/bin/dunit -p "5.3 5.4"
 
 ## Configuration
 
-Everything is customizable through the file `.dunitconfig` file. It is
-recommended to copy the included default configuration file `.dunitconfig.dist`
-and make changes as needed:
-
-```shell
-$ cp ./vendor/vectorface/dunit/.dunitconfig.dist ./.dunitconfig
-```
-
-or use environment variables to override the default settings:
-
-```shell
-$ DUNIT_PHPVERSION="5.3 5.4" DUNIT_PHPSYNTAX=true ./vendor/bin/dunit
-```
+Everything is customizable through the file `.dunitconfig` file. During
+`composer install` the `.dunitconfig` file will be added to your root directory.
