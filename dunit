@@ -5,7 +5,7 @@ dunitVersion="dev"
 
 # internal script variables
 script=$(readlink -f $0)
-scriptPath=`dirname ${script}`
+scriptPath=$(dirname ${script})
 workingPath=$(pwd)
 
 # default variables
