@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 #DUnit Version
-dunitVersion="v1.2.0"
+dunitVersion="v1.2.1"
 
 # internal script variables
 script=$(readlink -f $0)
