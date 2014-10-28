@@ -1,23 +1,8 @@
 #!/bin/bash
 
-#DUnit Version
-dunitVersion="dev"
-
-# internal script variables
-script=$(readlink -f $0)
-scriptPath=`dirname ${script}`
-workingPath=$(pwd)
-
-# default variables
-source "${scriptPath}/.dunitconfig.dist"
-
-# config path
-configPath="${workingPath}/.dunitconfig"
-
-# config and global overwrite
-if [ -a "${configPath}" ];
-  then source ${configPath}
-fi;
+# current version
+dUnitVersion="(git)"
+defaultPhpVersions="5.3 5.4 5.5 5.6"
 
 # getopt That allows the options to be passed
 while getopts ":hp:c:v" opt; do
@@ -25,18 +10,18 @@ while getopts ":hp:c:v" opt; do
   case ${opt} in
     h)
       printf "Options:\n"
-      printf "%-20s %-40s\n" '-c' 'Pass in a custom .dunit.config file'
-      printf "%-20s %-40s\n" '-h' 'Displays help information'
-      printf "%-20s %-40s\n" '-p' 'PHP Versions you wish to use (default: "5.3 5.4 5.5 5.6")'
-      printf "%-20s %-40s\n" '-v' 'Displays DUnit version'
+      printf "%-20s %-40s\n" "-c" "The path to a custom config file .dunit.config file"
+      printf "%-20s %-40s\n" "-h" "Displays help information"
+      printf "%-20s %-40s\n" "-p" "PHP Versions you wish to use (default: \"${defaultPhpVersions}\")"
+      printf "%-20s %-40s\n" "-v" "Displays DUnit version"
       exit 0;
       ;;
     v)
-      printf "DUnit version ${dunitVersion}\n"
+      printf "DUnit version ${dUnitVersion}\n"
       exit 0;
       ;;
     p)
-      DUNIT_PHPVERSION=$OPTARG
+      phpVersions=$OPTARG
       ;;
     c)
       configPath=$OPTARG
@@ -52,23 +37,58 @@ while getopts ":hp:c:v" opt; do
   esac
 done
 
-# allow path to be passed to docker for mounting
-if [ -n "$1" ];
-  then workingPath="${workingPath}/$1";
-fi
+# config path is set to look at the current folder if not specified in the
+# cli arguments
+if [ -z "$configPath" ]; then
+    configPath="$(pwd)/.dunitconfig"
+fi;
+
+# if the config file exists let's bring it in
+if [ -f "$configPath" ]; then
+    source ${configPath}
+fi;
+
+# ensure the variable $phpVersions is set
+if [ -z "$phpVersions" ]; then
+    if [ -z "${DUNIT_PHPVERSION}" ]; then
+        phpVersions=$defaultPhpVersions
+    else
+        phpVersions=$DUNIT_PHPVERSION
+    fi;
+fi;
+
+if [ -z "${DUNIT_DOCKERIMAGE}" ]; then
+    DUNIT_DOCKERIMAGE="vectorface/php"
+fi;
+
+if [ -z "${DUNIT_PHPSYNTAX}" ]; then
+    DUNIT_PHPSYNTAX=true
+fi;
+
+if [ -z "${DUNIT_PHPSYNTAXCOMMAND}" ]; then
+    DUNIT_PHPSYNTAXCOMMAND="find /opt/source -type f -name \"*.php\" !  -path \"*/vendor/*\" -print0 | xargs -0 -n 1 -P 8 php -l | grep -v 'No syntax errors'"
+fi;
+
+if [ -z "${DUNIT_PHPUNIT}" ]; then
+    DUNIT_PHPUNIT=true
+fi;
+
+if [ -z "${DUNIT_PHPUNITCOMMAND}" ]; then
+    DUNIT_PHPUNITCOMMAND="/opt/source/vendor/bin/phpunit"
+fi;
 
 # check if they have docker
-command -v docker >/dev/null 2>&1 || { printf >&2 "Docker is required to run the test suite against multiple versions of PHP.\nPlease just use ./vendor/bin/phpunit.\n"; exit 1; }
+command -v docker >/dev/null 2>&1 || { printf >&2 "Docker is required to run the DUnit.\n"; exit 1; }
 
 # spin up containers for the versions we're testing against
-for version in ${DUNIT_PHPVERSION}; do
+for version in $phpVersions; do
   printf "\nRunning on PHP %s\n" ${version}
   if [ $DUNIT_PHPSYNTAX == true ]; then
     echo "Checking syntax"
-    eval "docker run -v ${workingPath}:/opt/source -i -t -w /opt/source ${DUNIT_DOCKERIMAGE}${version} bash -c \" ${DUNIT_PHPSYNTAXCOMMAND} \""
+    eval "docker run -v $(pwd):/opt/source -i -t -w /opt/source ${DUNIT_DOCKERIMAGE}${version} bash -c \" ${DUNIT_PHPSYNTAXCOMMAND} \""
   fi
   if [ $DUNIT_PHPUNIT == true ]; then
     echo "Running unit test suite"
-    eval "docker run -v ${workingPath}:/opt/source -i -t -w /opt/source ${DUNIT_DOCKERIMAGE}${version} bash -c \" ${DUNIT_PHPUNITCOMMAND} \""
+    eval "docker run -v $(pwd):/opt/source -i -t -w /opt/source ${DUNIT_DOCKERIMAGE}${version} bash -c \" ${DUNIT_PHPUNITCOMMAND} \""
   fi
 done
