@@ -26,13 +26,11 @@ and has the following extensions installed:
 
 ## Installation
 
-Simply add the following to your composer.json `require-dev` field:
+Simply run the following [composer](https://getcomposer.org/) command:
 
-    "require-dev": {
-        "vectorface/dunit": "~1.0.0"
-    }
-
-and run `composer update`.
+```shell
+$ composer require vectorface/dunit --dev
+```
 
 ## Usage
 
