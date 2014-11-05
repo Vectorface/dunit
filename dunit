@@ -10,7 +10,7 @@ while getopts ":hp:c:v" opt; do
   case ${opt} in
     h)
       printf "Options:\n"
-      printf "%-20s %-40s\n" "-c" "The path to a custom config file .dunit.config file"
+      printf "%-20s %-40s\n" "-c" "The path to a custom config file"
       printf "%-20s %-40s\n" "-h" "Displays help information"
       printf "%-20s %-40s\n" "-p" "PHP Versions you wish to use (default: \"${defaultPhpVersions}\")"
       printf "%-20s %-40s\n" "-v" "Displays DUnit version"
