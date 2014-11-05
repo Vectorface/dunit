@@ -50,8 +50,10 @@ $ ./vendor/bin/dunit -p "5.3 5.4"
 
 ## Configuration
 
-There are three ways to customize the `dunit` command. These are listed in order
-of increasing priority.
+There are three ways to customize the `dunit` command:
+* Environment variables
+* Local config file
+* Script flags.
 
 ### Environment variables
 
@@ -89,7 +91,7 @@ Run `dunit` with a custom docker image named "myDocker/customImage5.3".
 $ DUNIT_PHPVERSION="5.3" DUNIT_DOCKERIMAGE="myDocker/customImage" ./vendor/bin/dunit
 ```
 
-### .dunitconfig
+### Local config file (.dunitconfig)
 
 The `dunit` script will check for the presence of a local file named `.dunitconfig`.
 An example config file can be copied from the composer package:
@@ -111,3 +113,17 @@ override conflicting environment variable settings.
 * `-c ./path/to/config` - `dunit` will use the config located at the provided
     path instead of looking in your local folder for `.dunitconfig`.
 * `-p "5.3 5.4"` - `dunit` will only run against the specified versions of PHP.
+
+#### Examples:
+
+Run `dunit` for versions 5.3 and 5.4 of PHP.
+
+```shell
+$ ./vendor/bin/dunit -p "5.3 5.4"
+```
+
+Run `dunit` with a custom config file.
+
+```shell
+$ ./vendor/bin/dunit -c ../dunit.global.conf
+```
