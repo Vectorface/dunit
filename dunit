@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # current version
-dUnitVersion="v1.4.0"
+dUnitVersion="(git)"
 defaultPhpVersions="5.3 5.4 5.5 5.6"
 
 # getopt That allows the options to be passed
