@@ -1,18 +1,18 @@
-# the versions of PHP to run against
-# possible versions: 5.2 5.3 5.4 5.5 5.6
-DUNIT_PHPVERSION="5.3 5.4 5.5 5.6"
+# the list of docker images to run against
+images="
+    vectorface/php5.3
+    vectorface/php5.4
+    vectorface/php5.5
+    vectorface/php5.6
+    vectorface/hhvm";
 
-# the docker image to launch the container with
-# note that the version will be appended to the end of the image
-# for example "vectorface/php5.4"
-DUNIT_DOCKERIMAGE="vectorface/php"
 
 # a flag indicating whether to run the syntax check
-DUNIT_PHPSYNTAX=true
+checkSyntax="true";
 # the syntax command to execute
-DUNIT_PHPSYNTAXCOMMAND="find /opt/source -type f -name \"*.php\" !  -path \"*/vendor/*\" -print0 | xargs -0 -n 1 -P 8 php -l | grep -v 'No syntax errors'"
+syntaxCommand="find /opt/source -type f -name \"*.php\" !  -path \"*/vendor/*\" -print0 | xargs -0 -n 1 -P 8 php -l | grep -v 'No syntax errors'"
 
 # a flag indicating whether to run the phpunit test suite
-DUNIT_PHPUNIT=true
+runTests="true";
 # the phpunit command to execute
-DUNIT_PHPUNITCOMMAND="/opt/source/vendor/bin/phpunit"
+unitTestsCommand="/opt/source/vendor/bin/phpunit"
