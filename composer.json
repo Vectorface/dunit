@@ -19,14 +19,12 @@
         }
     ],
     "bin": [
-        "dunit"
+        "bin/dunit"
     ],
-    "config": {
-        "bin-dir": "bin"
-    },
     "homepage": "https://github.com/Vectorface/dunit",
     "require-dev": {
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "~4.3",
+        "symfony/console": "~2.5"
     },
     "support": {
         "issues": "https://github.com/Vectorface/dunit/issues",
