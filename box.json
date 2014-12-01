@@ -1,0 +1,14 @@
+{
+    "files": [
+        "src/DunitApplication.php",
+        "src/DunitCommand.php",
+        "vendor/autoload.php"
+    ],
+    "directories": [
+        "vendor/composer",
+        "vendor/symfony"
+    ],
+    "main": "src/dunit.php",
+    "output": "bin/dunit.phar",
+    "stub": true
+}
