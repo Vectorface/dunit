@@ -17,6 +17,9 @@ class DunitApplication extends Application
     /** the default command we want to run */
     private $command;
 
+    /** The current version string */
+    const CURRENT_VERSION = "dev";
+
     /**
      * Returns an instance of the default command.
      * @return DunitCommand An instance of the default command.
@@ -62,6 +65,24 @@ class DunitApplication extends Application
         $inputDefinition = parent::getDefinition();
         $inputDefinition->setArguments();
         return $inputDefinition;
+    }
+
+    /**
+     * Returns the current (short) version of the application.
+     * @return string The current version of the application.
+     */
+    public function getVersion()
+    {
+        return self::CURRENT_VERSION;
+    }
+
+    /**
+     * Returns the full version of the application.
+     * @return string The full version of the application.
+     */
+    public function getLongVersion()
+    {
+        return sprintf('dunit-%s', self::CURRENT_VERSION);
     }
 }
 
