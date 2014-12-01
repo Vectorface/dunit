@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
  * subclassing the Console\Application class and overriding specific methods to
  * invoke a specific command by default.
  * @author Daniel Bruce <dbruce@vectorface.com>
+ * @copyright Vectorface, Inc. 2014
  */
 class DunitApplication extends Application
 {
