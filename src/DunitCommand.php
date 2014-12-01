@@ -58,6 +58,7 @@ class DunitCommand extends Command
     /** The format of the docker command that we execute */
     const DOCKER_COMMAND_FORMAT = 'docker run -v $(pwd):/opt/source -i -t -w /opt/source %s bash -c " %s "';
 
+    // a map from environment variables to parameter options
     private static $optionsMap = array(
         self::ENV_VAR_IMAGES => self::OPTIONS_KEY_IMAGES,
         self::ENV_VAR_SYNTAX => self::OPTIONS_KEY_SYNTAX,
