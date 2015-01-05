@@ -1,5 +1,5 @@
 # builds a debian wheezy image with php5.4
-FROM vectorface/php-base
+FROM debian:wheezy
 ENV INSTALL_PACKAGES php5-cli php-apc php5-curl php5-gd php5-intl php5-json php5-mcrypt
 RUN \
     apt-get -y update && \
