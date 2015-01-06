@@ -72,11 +72,8 @@ There are three ways to customize the `dunit` command:
 
 The following environment variables can be set to configure dunit.
 
-* `DUNIT_PHPVERSION` - a string like "5.3 5.4" indicates the version of PHP to
-    run against.
-* `DUNIT_DOCKERIMAGE` - a string like "vectorface/php" to indicate which Docker
-    image to use. Note that the PHP version will be appended to the end of the
-    Docker image so the actual image would be "vectorface/php5.4".
+* `DUNIT_IMAGES` - a string like "vectorface/php5.3 vectorface/php5.4"
+    which indicates the list of images to run against.
 * `DUNIT_PHPSYNTAX` - a `true`/`false` flag indicating whether dunit should run
     the syntax checks.
 * `DUNIT_PHPSYNTAXCOMMAND` - a string indicating the exact command dunit should
