@@ -1,21 +1,25 @@
 # DUnit
 
 DUnit (dee-unit) makes your life easier by allowing you to test your PHP code
-across multiple versions of PHP. [Docker](https://www.docker.com/whatisdocker/)
-is used to provide an isolated test environment for each version of PHP. Out of
-the box DUnit can perform a syntax check against your whole repository and run a
-[PHPUnit](https://phpunit.de/) test suite.
+against multiple [Docker](https://www.docker.com/whatisdocker/) containers.
+This allows for testing your code against different versions of PHP or against
+different PHP configurations.
+By default, DUnit can perform a syntax check against your whole repository and
+run a [PHPUnit](https://phpunit.de/) test suite.
 
-## Supported versions of PHP
+## Default Containers
 
-DUnit currently supports:
+DUnit includes preconfigured containers for the following PHP versions:
+
 * PHP 5.2 (Must be specified in .dunitconfig)
 * PHP 5.3
 * PHP 5.4
 * PHP 5.5
 * PHP 5.6
+* HHVM stable (Must be specified in .dunitconfig)
+* HHVM nightly (Must be specified in .dunitconfig)
 
-and has the following extensions installed:
+and has the following native extensions installed:
 
 * apc (apcu on PHP 5.5 and newer)
 * curl
@@ -31,6 +35,15 @@ Simply run the following [composer](https://getcomposer.org/) command:
 ```shell
 $ composer require vectorface/dunit --dev
 ```
+
+It is highly recommended to copy the example config to your project root to
+control the default behaviour of the `dunit` command.
+
+```shell
+$ cp ./vendor/vectorface/dunit/dunitconfig.example ./.dunitconfig
+```
+
+And edit the file `.dunitconfig` to suit your tastes.
 
 ## Usage
 
