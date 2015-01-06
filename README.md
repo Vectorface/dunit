@@ -11,13 +11,13 @@ run a [PHPUnit](https://phpunit.de/) test suite.
 
 DUnit includes preconfigured containers for the following PHP versions:
 
-* PHP 5.2 (Must be specified in .dunitconfig)
+* PHP 5.2 (add `vectorface/php5.2` to your `.dunitconfig`)
 * PHP 5.3
 * PHP 5.4
 * PHP 5.5
 * PHP 5.6
-* HHVM stable (Must be specified in .dunitconfig)
-* HHVM nightly (Must be specified in .dunitconfig)
+* HHVM stable
+* HHVM nightly (add `vectorface/hhvm-nightly` to your `.dunitconfig`)
 
 and has the following native extensions installed:
 
@@ -57,8 +57,8 @@ $ ./vendor/bin/dunit -h
 # specify a custom configuration file
 $ ./vendor/bin/dunit -c "path/.dunitconf"
 
-# explictly specify which versions of PHP to use
-$ ./vendor/bin/dunit -p "5.3 5.4"
+# explictly specify which containers to use
+$ ./vendor/bin/dunit -i "vectorface/php5.3 vectorface/php5.4"
 ```
 
 ## Configuration
@@ -125,14 +125,14 @@ override conflicting environment variable settings.
 * `-v` - displays the current version.
 * `-c ./path/to/config` - `dunit` will use the config located at the provided
     path instead of looking in your local folder for `.dunitconfig`.
-* `-p "5.3 5.4"` - `dunit` will only run against the specified versions of PHP.
+* `-i "image1 image2"` - `dunit` will only run against the specified images.
 
 #### Examples:
 
 Run `dunit` for versions 5.3 and 5.4 of PHP.
 
 ```shell
-$ ./vendor/bin/dunit -p "5.3 5.4"
+$ ./vendor/bin/dunit -i "vectorface/php5.3 vectorface/php5.4"
 ```
 
 Run `dunit` with a custom config file.
@@ -140,3 +140,14 @@ Run `dunit` with a custom config file.
 ```shell
 $ ./vendor/bin/dunit -c ../dunit.global.conf
 ```
+
+## Upgrading from 1.x to 2.x
+
+The `.dunitconfig` syntax has changed entirely from version 1 to version 2 so
+it is required that you copy the new config file in place.
+
+```shell
+$ cp ./vendor/vectorface/dunit/dunitconfig.example ./.dunitconfig
+```
+
+and adjust your config accordingly.
