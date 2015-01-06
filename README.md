@@ -92,13 +92,7 @@ The following environment variables can be set to configure dunit.
 Run `dunit` for versions 5.3 and 5.4 of PHP and skip the syntax check:
 
 ```shell
-$ DUNIT_PHPVERSION="5.3 5.4" DUNIT_PHPSYNTAX=false ./vendor/bin/dunit
-```
-
-Run `dunit` with a custom docker image named "myDocker/customImage5.3".
-
-```shell
-$ DUNIT_PHPVERSION="5.3" DUNIT_DOCKERIMAGE="myDocker/customImage" ./vendor/bin/dunit
+$ DUNIT_IMAGES="vectorface/php5.3 vectorface/php5.4" DUNIT_PHPSYNTAX=false ./vendor/bin/dunit
 ```
 
 ### Local config file (.dunitconfig)
@@ -148,3 +142,7 @@ $ cp ./vendor/vectorface/dunit/dunitconfig.example ./.dunitconfig
 ```
 
 and adjust your config accordingly.
+
+Also note that DUnit no longer supports the environment variables
+`DUNIT_PHPVERSION` and `DUNIT_DOCKERIMAGE`. These variables have been merged as
+the variable `DUNIT_IMAGES`.
