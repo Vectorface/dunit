@@ -113,10 +113,10 @@ The `dunit` script can also take a number of flags. These flags will always
 override conflicting environment variable settings.
 
 * `-h` - displays help information.
-* `-v` - displays the current version.
 * `-c ./path/to/config` - `dunit` will use the config located at the provided
     path instead of looking in your local folder for `.dunitconfig`.
 * `-i "image1 image2"` - `dunit` will only run against the specified images.
+* `--version` - displays the current version.
 
 #### Examples:
 
