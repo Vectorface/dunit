@@ -18,7 +18,7 @@ class DunitApplication extends Application
     private $command;
 
     /** The current version string */
-    const CURRENT_VERSION = "dev";
+    const CURRENT_VERSION = "v2.0.0";
 
     /**
      * Returns an instance of the default command.
