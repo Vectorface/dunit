@@ -146,3 +146,5 @@ and adjust your config accordingly.
 Also note that DUnit no longer supports the environment variables
 `DUNIT_PHPVERSION` and `DUNIT_DOCKERIMAGE`. These variables have been merged as
 the variable `DUNIT_IMAGES`.
+
+Similarly, the flag `-p` has been replaced by `-i`.
