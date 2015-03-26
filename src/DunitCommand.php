@@ -49,6 +49,8 @@ class DunitCommand extends Command
     const OPTIONS_KEY_UNITTESTS = 'runTests';
     /** The option for the unit tests command */
     const OPTIONS_KEY_UNITTESTSCOMMAND = 'unitTestsCommand';
+    /** The option key to pull new images instead of running the commands. */
+    const OPTIONS_KEY_PULL = 'pull';
 
     /** Exit code for an error */
     const ERROR_CODE = 1;
@@ -57,6 +59,9 @@ class DunitCommand extends Command
 
     /** The format of the docker command that we execute */
     const DOCKER_COMMAND_FORMAT = 'docker run -v $(pwd):/opt/source -i -t -w /opt/source %s bash -c " %s "';
+
+    /** The format of the docker pull command for updating images */
+    const DOCKER_COMMAND_PULL = 'docker pull %s';
 
     // a map from environment variables to parameter options
     private static $optionsMap = array(
@@ -122,6 +127,12 @@ class DunitCommand extends Command
             InputOption::VALUE_OPTIONAL,
             'The command to run the unit tests.'
         );
+        $this->addOption(
+            self::OPTIONS_KEY_PULL,
+            'p',
+            InputOption::VALUE_NONE,
+            'A flag indicating to pull new images instead of running the linter or unit tests.'
+        );
     }
 
     /**
@@ -142,6 +153,14 @@ class DunitCommand extends Command
         }
         // loop over each of the docker images specified
         foreach ($options[self::OPTIONS_KEY_IMAGES] as $image) {
+            if ($options[self::OPTIONS_KEY_PULL]) {
+                passthru(sprintf(
+                    self::DOCKER_COMMAND_PULL,
+                    escapeshellarg($image)
+                ));
+                continue;
+            }
+
             $output->writeln('Running against image '.$image);
             if ($options[self::OPTIONS_KEY_SYNTAX]) {
                 $output->writeln('Checking syntax');
@@ -227,6 +246,9 @@ class DunitCommand extends Command
                 $options[self::OPTIONS_KEY_UNITTESTSCOMMAND]
             );
         }
+
+        $options[self::OPTIONS_KEY_PULL] = $input->getOption(self::OPTIONS_KEY_PULL);
+
         return $options;
     }
 
@@ -247,7 +269,8 @@ class DunitCommand extends Command
             self::OPTIONS_KEY_SYNTAX => true,
             self::OPTIONS_KEY_SYNTAXCOMMAND => 'find /opt/source -type f -name "*.php" !  -path "*/vendor/*" -print0 | xargs -0 -n 1 -P 8 php -l | grep -v "No syntax errors"',
             self::OPTIONS_KEY_UNITTESTS => true,
-            self::OPTIONS_KEY_UNITTESTSCOMMAND => '/opt/source/vendor/bin/phpunit'
+            self::OPTIONS_KEY_UNITTESTSCOMMAND => '/opt/source/vendor/bin/phpunit',
+            self::OPTIONS_KEY_PULL => false,
         );
     }
 
