@@ -10,7 +10,6 @@ RUN \
     apt-get -y --force-yes install $INSTALL_PACKAGES && \
     apt-get -y autoremove && \
     apt-get -y clean && \
-    rm -rf /var/lib/apt/lists/*
-RUN rm -rf /etc/php5/mods-available
+    rm -rf /var/lib/apt/lists/* /etc/php5/mods-available
 RUN mv /etc/apt/sources.list.backup /etc/apt/sources.list
 RUN rm /etc/apt/preferences.d/preferences
