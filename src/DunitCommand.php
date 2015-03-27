@@ -57,8 +57,16 @@ class DunitCommand extends Command
     /** Exit code for successful execution */
     const NO_ERROR = 0;
 
+    /** The default width if we are unable to dynamically determine the
+      * current terminal width */
+    const DEFAULT_WIDTH = 80;
+    /** The array key for the terminal width */
+    const DIMENSION_WIDTH = 0;
+    /** The array key for the terminal height */
+    const DIMENSION_HEIGHT = 1;
+
     /** The format of the docker command that we execute */
-    const DOCKER_COMMAND_FORMAT = 'docker run -v $(pwd):/opt/source -i -t -w /opt/source %s bash -c " %s "';
+    const DOCKER_COMMAND_FORMAT = 'docker run -t -v $(pwd):/opt/source -w /opt/source %s /bin/bash -c " stty columns %d && %s "';
 
     /** The format of the docker pull command for updating images */
     const DOCKER_COMMAND_PULL = 'docker pull %s';
@@ -433,8 +441,23 @@ class DunitCommand extends Command
         passthru(sprintf(
             self::DOCKER_COMMAND_FORMAT,
             escapeshellarg($image),
+            intval($this->getColumns()),
             $command
         ));
+    }
+
+    /**
+     * Returns the number of character columns in the terminal.
+     * @return int The width of the terminal (in number of characters).
+     */
+    private function getColumns()
+    {
+        $dimensions = $this->getApplication()->getTerminalDimensions();
+        if (is_array($dimensions) && count($dimensions) > self::DIMENSION_WIDTH) {
+            return $dimensions[self::DIMENSION_WIDTH];
+        } else {
+            return self::DEFAULT_WIDTH;
+        }
     }
 }
 
