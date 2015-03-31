@@ -16,7 +16,7 @@ DUnit includes preconfigured containers for the following PHP versions:
 * PHP 5.4
 * PHP 5.5
 * PHP 5.6
-* PHP 7.0-beta (add `vectorface/php-nightly` to your `dunitconfig`)
+* PHP 7.0-dev (add `vectorface/php-nightly` to your `dunitconfig`)
 * HHVM stable
 * HHVM nightly (add `vectorface/hhvm-nightly` to your `.dunitconfig`)
 
