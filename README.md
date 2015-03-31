@@ -16,6 +16,7 @@ DUnit includes preconfigured containers for the following PHP versions:
 * PHP 5.4
 * PHP 5.5
 * PHP 5.6
+* PHP 7.0-beta (add `vectorface/php-nightly` to your `dunitconfig`)
 * HHVM stable
 * HHVM nightly (add `vectorface/hhvm-nightly` to your `.dunitconfig`)
 
@@ -117,6 +118,7 @@ override conflicting environment variable settings.
     path instead of looking in your local folder for `.dunitconfig`.
 * `-i "image1 image2"` - `dunit` will only run against the specified images.
 * `--version` - displays the current version.
+* `-p` - pulls the latest version of all the docker images
 
 #### Examples:
 
