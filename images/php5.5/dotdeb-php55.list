@@ -1,0 +1,2 @@
+deb http://packages.dotdeb.org wheezy all
+deb http://packages.dotdeb.org wheezy-php55 all
